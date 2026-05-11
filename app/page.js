@@ -3,8 +3,8 @@ export default function Home() {
     <div className="govuk-grid-row">
       <div className="govuk-grid-column-two-thirds">
 
-        <h1 className="govuk-heading-xl">GOV.UK Data Pal</h1>
-        <p className="govuk-body-l">Turn your findings into engaging, on-brand communications in seconds.</p>
+          <h1 className="govuk-heading-xl" style={{marginBottom: '10px'}}>GOV.UK Data Pal</h1>
+          <p className="govuk-body-l" style={{marginTop: 0}}>Turn your findings into engaging, on-brand communications in seconds.</p>
 
         <p className="govuk-body">Choose how you want to start:</p>
 

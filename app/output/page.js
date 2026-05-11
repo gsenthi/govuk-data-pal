@@ -179,9 +179,9 @@ export default function Output() {
           <div className="govuk-grid-column-two-thirds">
 
             <div style={{borderLeft: '6px solid #12436D', padding: '16px 20px', background: '#fff', marginBottom: '24px', boxShadow: '2px 2px 0 #b1b4b6'}}>
-              <strong className="govuk-tag" style={{background: '#12436D', marginBottom: '12px', display: 'inline-block'}}>
-                GOV.UK HEADLINE
-              </strong>
+              <strong className="govuk-tag" style={{background: '#12436D', color: '#ffffff', marginBottom: '12px', display: 'inline-block'}}>
+                A possible headline
+              </strong> 
               <h2 className="govuk-heading-l" style={{color: '#12436D', marginTop: '12px', marginBottom: '0'}}>
                 {result.govuk_headline}
               </h2>
