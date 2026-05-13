@@ -32,64 +32,105 @@ export default function Output() {
     if (!el) return
     d3.select(el).selectAll('*').remove()
 
-    const margin = { top: 20, right: 20, bottom: 60, left: 60 }
-    const width = el.offsetWidth - margin.left - margin.right
-    const height = 320 - margin.top - margin.bottom
-
-    const svg = d3.select(el)
-      .append('svg')
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
-      .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`)
-
     const chartData = type === 'mixed' ? data.quant : data
     const labels = chartData.labels
     const series = chartData.series
     const chartType = result.chart_type
 
+    const allValues = series.flatMap(s => s.values.map(Number).filter(v => !isNaN(v)))
+    const isDecimal = allValues.every(v => v >= 0 && v <= 1)
+
+    const legendHeight = series.length > 1 ? 40 : 0
+    const margin = { top: 20, right: 20, bottom: 50 + legendHeight, left: 70 }
+    const totalWidth = el.offsetWidth
+    const totalHeight = 360
+    const width = totalWidth - margin.left - margin.right
+    const height = totalHeight - margin.top - margin.bottom
+
+    const svg = d3.select(el)
+      .append('svg')
+      .attr('width', totalWidth)
+      .attr('height', totalHeight)
+      .append('g')
+      .attr('transform', `translate(${margin.left},${margin.top})`)
+
+    const yMax = d3.max(allValues)
+    const y = d3.scaleLinear()
+      .domain([0, isDecimal ? 1 : yMax * 1.1])
+      .range([height, 0])
+
+    const yAxis = d3.axisLeft(y)
+      .ticks(5)
+      .tickFormat(d => isDecimal ? `${Math.round(d * 100)}%` : d)
+
     svg.append('g')
-      .attr('transform', `translate(0,${height})`)
-      .call(d3.axisBottom(d3.scalePoint().domain(labels).range([0, width])))
+      .call(yAxis)
       .selectAll('text')
       .style('font-family', 'Arial, sans-serif')
       .style('font-size', '13px')
       .style('fill', '#0b0c0c')
 
+    svg.selectAll('.domain').style('stroke', '#b1b4b6')
+    svg.selectAll('.tick line').style('stroke', '#b1b4b6')
+
+    svg.selectAll('.grid-line')
+      .data(y.ticks(5))
+      .enter()
+      .append('line')
+      .attr('x1', 0)
+      .attr('x2', width)
+      .attr('y1', d => y(d))
+      .attr('y2', d => y(d))
+      .style('stroke', '#e8e8e8')
+      .style('stroke-width', 1)
+
     if (chartType === 'line') {
-      const x = d3.scalePoint().domain(labels).range([0, width])
-      const allValues = series.flatMap(s => s.values.map(Number).filter(v => !isNaN(v)))
-      const y = d3.scaleLinear().domain([0, d3.max(allValues) * 1.1]).range([height, 0])
+      const x = d3.scalePoint().domain(labels).range([0, width]).padding(0.1)
 
-      svg.append('g').call(d3.axisLeft(y).ticks(5))
-        .selectAll('text').style('font-family', 'Arial, sans-serif').style('font-size', '13px').style('fill', '#0b0c0c')
-
-      svg.selectAll('.domain, .tick line').style('stroke', '#b1b4b6')
+      svg.append('g')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x))
+        .selectAll('text')
+        .style('font-family', 'Arial, sans-serif')
+        .style('font-size', '13px')
+        .style('fill', '#0b0c0c')
 
       series.forEach((s, i) => {
-        const lineData = labels.map((l, li) => ({ label: l, value: Number(s.values[li]) })).filter(d => !isNaN(d.value))
+        const lineData = labels
+          .map((l, li) => ({ label: l, value: Number(s.values[li]) }))
+          .filter(d => !isNaN(d.value))
+
         svg.append('path')
           .datum(lineData)
           .attr('fill', 'none')
           .attr('stroke', GOVUK_PALETTE[i % GOVUK_PALETTE.length])
-          .attr('stroke-width', 3)
+          .attr('stroke-width', 2.5)
           .attr('d', d3.line().x(d => x(d.label)).y(d => y(d.value)))
+
         svg.selectAll(`.dot-${i}`)
           .data(lineData)
-          .enter().append('circle')
+          .enter()
+          .append('circle')
           .attr('cx', d => x(d.label))
           .attr('cy', d => y(d.value))
-          .attr('r', 6)
+          .attr('r', 5)
           .attr('fill', GOVUK_PALETTE[i % GOVUK_PALETTE.length])
       })
+
     } else {
       const x0 = d3.scaleBand().domain(labels).range([0, width]).padding(0.2)
-      const x1 = d3.scaleBand().domain(series.map(s => s.name)).rangeRound([0, x0.bandwidth()]).padding(0.05)
-      const allValues = series.flatMap(s => s.values.map(Number).filter(v => !isNaN(v)))
-      const y = d3.scaleLinear().domain([0, d3.max(allValues) * 1.1]).range([height, 0])
+      const x1 = d3.scaleBand()
+        .domain(series.map(s => s.name))
+        .rangeRound([0, x0.bandwidth()])
+        .padding(0.05)
 
-      svg.append('g').call(d3.axisLeft(y).ticks(5))
-        .selectAll('text').style('font-family', 'Arial, sans-serif').style('font-size', '13px').style('fill', '#0b0c0c')
+      svg.append('g')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x0))
+        .selectAll('text')
+        .style('font-family', 'Arial, sans-serif')
+        .style('font-size', '13px')
+        .style('fill', '#0b0c0c')
 
       labels.forEach(label => {
         series.forEach((s, i) => {
@@ -106,10 +147,24 @@ export default function Output() {
     }
 
     if (series.length > 1) {
-      const legend = svg.append('g').attr('transform', `translate(0,${height + 40})`)
+      const maxPerRow = Math.floor(width / 140)
+      const legend = svg.append('g').attr('transform', `translate(0,${height + 36})`)
       series.forEach((s, i) => {
-        legend.append('rect').attr('x', i * 140).attr('width', 14).attr('height', 14).attr('fill', GOVUK_PALETTE[i % GOVUK_PALETTE.length])
-        legend.append('text').attr('x', i * 140 + 20).attr('y', 12).text(s.name).style('font-size', '13px').style('font-family', 'Arial, sans-serif').style('fill', '#0b0c0c')
+        const col = i % maxPerRow
+        const row = Math.floor(i / maxPerRow)
+        legend.append('rect')
+          .attr('x', col * 140)
+          .attr('y', row * 22)
+          .attr('width', 14)
+          .attr('height', 14)
+          .attr('fill', GOVUK_PALETTE[i % GOVUK_PALETTE.length])
+        legend.append('text')
+          .attr('x', col * 140 + 20)
+          .attr('y', row * 22 + 12)
+          .text(s.name)
+          .style('font-size', '13px')
+          .style('font-family', 'Arial, sans-serif')
+          .style('fill', '#0b0c0c')
       })
     }
   }
@@ -204,17 +259,17 @@ export default function Output() {
               {result.narrative}
             </p>
 
-            {/* Key stat and theme — equal width boxes */}
+            {/* Key stat and theme */}
             {(result.key_stat || result.key_theme) && (
-              <div style={{display: 'flex', gap: '16px', marginBottom: '40px'}}>
+              <div style={{display: 'flex', gap: '16px', marginBottom: '40px', flexWrap: 'wrap'}}>
                 {result.key_stat && (
-                  <div style={{flex: 1, background: '#12436D', color: '#ffffff', padding: '20px 24px'}}>
+                  <div style={{display: 'inline-flex', flexDirection: 'column', background: '#12436D', color: '#ffffff', padding: '20px 28px', minWidth: '180px', maxWidth: '300px'}}>
                     <p style={{margin: '0 0 8px 0', fontSize: '12px', fontFamily: 'Arial, sans-serif', fontWeight: 'bold', letterSpacing: '0.08em', opacity: 0.8}}>KEY STAT</p>
-                    <p style={{margin: '0', fontSize: '24px', fontWeight: 'bold', fontFamily: 'Arial, sans-serif', lineHeight: '1.2'}}>{result.key_stat}</p>
+                    <p style={{margin: '0', fontSize: '22px', fontWeight: 'bold', fontFamily: 'Arial, sans-serif', lineHeight: '1.2'}}>{result.key_stat}</p>
                   </div>
                 )}
                 {result.key_theme && (
-                  <div style={{flex: 1, background: '#28A197', color: '#ffffff', padding: '20px 24px'}}>
+                  <div style={{display: 'inline-flex', flexDirection: 'column', background: '#28A197', color: '#ffffff', padding: '20px 28px', minWidth: '180px', maxWidth: '300px'}}>
                     <p style={{margin: '0 0 8px 0', fontSize: '12px', fontFamily: 'Arial, sans-serif', fontWeight: 'bold', letterSpacing: '0.08em', opacity: 0.8}}>KEY THEME</p>
                     <p style={{margin: '0', fontSize: '18px', fontWeight: 'bold', fontFamily: 'Arial, sans-serif', lineHeight: '1.3'}}>{result.key_theme}</p>
                   </div>
@@ -226,7 +281,7 @@ export default function Output() {
             {type !== 'qual' && (
               <div style={{marginBottom: '40px'}}>
                 <div ref={chartRef} style={{width: '100%', background: '#ffffff', padding: '16px', border: '1px solid #b1b4b6'}} />
-                <div style={{marginTop: '12px', display: 'flex', alignItems: 'center', gap: '16px'}}>
+                <div style={{marginTop: '16px'}}>
                   <button className="govuk-button govuk-button--secondary" style={{marginBottom: 0}} onClick={copyChart}>
                     {copied ? '✓ Copied to clipboard' : 'Copy chart as image'}
                   </button>
@@ -252,7 +307,7 @@ export default function Output() {
             )}
 
             {/* Download */}
-            <div style={{marginBottom: '40px', paddingTop: '8px', borderTop: '1px solid #b1b4b6'}}>
+            <div style={{marginBottom: '40px', paddingTop: '24px', borderTop: '1px solid #b1b4b6'}}>
               <button className="govuk-button" onClick={downloadWord} style={{marginBottom: 0}}>
                 Download as Word doc
               </button>
