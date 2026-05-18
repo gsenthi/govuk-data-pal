@@ -33,7 +33,9 @@ export default function RootLayout({ children }) {
             <div className="govuk-footer__meta">
               <div className="govuk-footer__meta-item govuk-footer__meta-item--grow">
                 <p className="govuk-footer__licence-description">
-                  Built by Ganesh in Insights and Analytics
+                  Built by Ganesh in Insights and Analytics. GOV.UK Data Pal is an internal tool that helps colleagues go from raw findings to polished communication quickly and consistently. By adding your data, you can generate a GOV.UK-style headline, a plain English narrative, a chart, and accessibility alt-text automatically. 
+                  It is built by bringing together GOV.UK's data brand guidelines, D3.js visualisation library and Claude. 
+                
                 </p>
               </div>
             </div>
