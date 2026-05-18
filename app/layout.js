@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
             <div className="govuk-footer__meta">
               <div className="govuk-footer__meta-item govuk-footer__meta-item--grow">
                 <p className="govuk-footer__licence-description">
-                  Built with the GOV.UK Design System
+                  Built by Ganesh in Insights and Analytics
                 </p>
               </div>
             </div>
