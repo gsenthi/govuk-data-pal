@@ -3,40 +3,40 @@ export default function Home() {
     <div className="govuk-grid-row">
       <div className="govuk-grid-column-two-thirds">
 
-          <h1 className="govuk-heading-xl" style={{marginBottom: '10px'}}>GOV.UK Data Pal</h1>
-          <p className="govuk-body-l" style={{marginTop: 0}}>Turn your findings into engaging, on-brand communications in seconds.</p>
+        <h1 className="govuk-heading-xl" style={{marginBottom: '10px'}}>GOV.UK Data Pal</h1>
+        <p className="govuk-body-l" style={{marginTop: 0}}>Turn your findings into engaging, on-brand communications in seconds.</p>
 
         <p className="govuk-body">Choose how you want to start:</p>
 
         <div className="govuk-grid-row" style={{marginTop: '30px'}}>
 
           <div className="govuk-grid-column-one-third">
-            <div style={{background: '#f3f2f1', padding: '20px', height: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+            <div style={{background: '#ffffff', padding: '20px', height: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid #CECECE', borderTop: '4px solid #1D70B8'}}>
               <div>
                 <h2 className="govuk-heading-m">Quant data</h2>
                 <p className="govuk-body-s">Enter numbers manually or upload a CSV or Excel file.</p>
               </div>
-              <a href="/quant" className="govuk-button" style={{marginBottom: 0}}>Start</a>
+              <a href="/quant" className="govuk-button" style={{marginBottom: 0, backgroundColor: '#1D70B8'}}>Start</a>
             </div>
           </div>
 
           <div className="govuk-grid-column-one-third">
-            <div style={{background: '#f3f2f1', padding: '20px', height: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+            <div style={{background: '#ffffff', padding: '20px', height: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid #CECECE', borderTop: '4px solid #1D70B8'}}>
               <div>
                 <h2 className="govuk-heading-m">Qual themes</h2>
                 <p className="govuk-body-s">Paste your coded themes and get a narrative and pull quotes.</p>
               </div>
-              <a href="/qual" className="govuk-button" style={{marginBottom: 0}}>Start</a>
+              <a href="/qual" className="govuk-button" style={{marginBottom: 0, backgroundColor: '#1D70B8'}}>Start</a>
             </div>
           </div>
 
           <div className="govuk-grid-column-one-third">
-            <div style={{background: '#f3f2f1', padding: '20px', height: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+            <div style={{background: '#ffffff', padding: '20px', height: '200px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid #CECECE', borderTop: '4px solid #1D70B8'}}>
               <div>
                 <h2 className="govuk-heading-m">Mixed</h2>
                 <p className="govuk-body-s">Combine qual themes with quant data for a richer output.</p>
               </div>
-              <a href="/mixed" className="govuk-button" style={{marginBottom: 0}}>Start</a>
+              <a href="/mixed" className="govuk-button" style={{marginBottom: 0, backgroundColor: '#1D70B8'}}>Start</a>
             </div>
           </div>
 

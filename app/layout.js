@@ -12,17 +12,17 @@ export default function RootLayout({ children }) {
           href="https://unpkg.com/govuk-frontend@5.4.0/dist/govuk/govuk-frontend.min.css"
         />
       </head>
-      <body className="govuk-template__body">
+      <body className="govuk-template__body" style={{backgroundColor: '#F4F8FB'}}>
         <a href="#main-content" className="govuk-skip-link">Skip to main content</a>
-        <header className="govuk-header" role="banner">
-  <       div className="govuk-header__container govuk-width-container">
-          <div className="govuk-header__logo">
-             <a href="/" className="govuk-header__link govuk-header__link--homepage" style={{fontWeight: 'bold', fontSize: '22px'}}>
-              GOV.UK Data Pal
-            </a>
+        <header className="govuk-header" role="banner" style={{backgroundColor: '#1D70B8', borderBottomColor: '#00FFE0', borderBottomWidth: '4px', borderBottomStyle: 'solid'}}>
+          <div className="govuk-header__container govuk-width-container" style={{borderBottomColor: 'transparent'}}>
+            <div className="govuk-header__logo">
+              <a href="/" className="govuk-header__link govuk-header__link--homepage" style={{fontWeight: 'bold', fontSize: '22px', textDecoration: 'none'}}>
+                GOV.UK <span style={{color: '#00FFE0'}}>·</span> Data Pal
+              </a>
+            </div>
           </div>
-          </div>
-        </header> 
+        </header>
         <div className="govuk-width-container">
           <main className="govuk-main-wrapper" id="main-content">
             {children}

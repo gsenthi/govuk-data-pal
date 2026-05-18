@@ -3,7 +3,14 @@
 import { useEffect, useState, useRef } from 'react'
 import * as d3 from 'd3'
 
-const GOVUK_PALETTE = ['#12436D', '#28A197', '#801650', '#F46A25', '#3D3D3D', '#A285D1', '#247453', '#7DAD2A']
+const GOVUK_CHART_PALETTE = [
+  '#1D70B8',
+  '#0F385C',
+  '#CA357C',
+  '#7F65B7',
+  '#50A1A5',
+  '#F7996A',
+]
 
 export default function Output() {
   const [result, setResult] = useState(null)
@@ -68,10 +75,10 @@ export default function Output() {
       .selectAll('text')
       .style('font-family', 'Arial, sans-serif')
       .style('font-size', '13px')
-      .style('fill', '#0b0c0c')
+      .style('fill', '#0B0C0C')
 
-    svg.selectAll('.domain').style('stroke', '#b1b4b6')
-    svg.selectAll('.tick line').style('stroke', '#b1b4b6')
+    svg.selectAll('.domain').style('stroke', '#CECECE')
+    svg.selectAll('.tick line').style('stroke', '#CECECE')
 
     svg.selectAll('.grid-line')
       .data(y.ticks(5))
@@ -81,7 +88,7 @@ export default function Output() {
       .attr('x2', width)
       .attr('y1', d => y(d))
       .attr('y2', d => y(d))
-      .style('stroke', '#e8e8e8')
+      .style('stroke', '#CECECE')
       .style('stroke-width', 1)
 
     if (chartType === 'line') {
@@ -93,7 +100,7 @@ export default function Output() {
         .selectAll('text')
         .style('font-family', 'Arial, sans-serif')
         .style('font-size', '13px')
-        .style('fill', '#0b0c0c')
+        .style('fill', '#0B0C0C')
 
       series.forEach((s, i) => {
         const lineData = labels
@@ -103,7 +110,7 @@ export default function Output() {
         svg.append('path')
           .datum(lineData)
           .attr('fill', 'none')
-          .attr('stroke', GOVUK_PALETTE[i % GOVUK_PALETTE.length])
+          .attr('stroke', GOVUK_CHART_PALETTE[i % GOVUK_CHART_PALETTE.length])
           .attr('stroke-width', 2.5)
           .attr('d', d3.line().x(d => x(d.label)).y(d => y(d.value)))
 
@@ -114,7 +121,7 @@ export default function Output() {
           .attr('cx', d => x(d.label))
           .attr('cy', d => y(d.value))
           .attr('r', 5)
-          .attr('fill', GOVUK_PALETTE[i % GOVUK_PALETTE.length])
+          .attr('fill', GOVUK_CHART_PALETTE[i % GOVUK_CHART_PALETTE.length])
       })
 
     } else {
@@ -130,7 +137,7 @@ export default function Output() {
         .selectAll('text')
         .style('font-family', 'Arial, sans-serif')
         .style('font-size', '13px')
-        .style('fill', '#0b0c0c')
+        .style('fill', '#0B0C0C')
 
       labels.forEach(label => {
         series.forEach((s, i) => {
@@ -141,7 +148,7 @@ export default function Output() {
             .attr('y', y(val))
             .attr('width', x1.bandwidth())
             .attr('height', height - y(val))
-            .attr('fill', GOVUK_PALETTE[i % GOVUK_PALETTE.length])
+            .attr('fill', GOVUK_CHART_PALETTE[i % GOVUK_CHART_PALETTE.length])
         })
       })
     }
@@ -157,14 +164,14 @@ export default function Output() {
           .attr('y', row * 22)
           .attr('width', 14)
           .attr('height', 14)
-          .attr('fill', GOVUK_PALETTE[i % GOVUK_PALETTE.length])
+          .attr('fill', GOVUK_CHART_PALETTE[i % GOVUK_CHART_PALETTE.length])
         legend.append('text')
           .attr('x', col * 140 + 20)
           .attr('y', row * 22 + 12)
           .text(s.name)
           .style('font-size', '13px')
           .style('font-family', 'Arial, sans-serif')
-          .style('fill', '#0b0c0c')
+          .style('fill', '#0B0C0C')
       })
     }
   }
@@ -245,11 +252,11 @@ export default function Output() {
             <h1 className="govuk-heading-xl" style={{marginBottom: '30px'}}>Your communication</h1>
 
             {/* Headline card */}
-            <div style={{borderLeft: '6px solid #12436D', padding: '20px 24px', background: '#ffffff', marginBottom: '32px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}>
-              <strong style={{background: '#12436D', color: '#ffffff', fontSize: '12px', fontFamily: 'Arial, sans-serif', fontWeight: 'bold', padding: '4px 10px', letterSpacing: '0.05em', display: 'inline-block', marginBottom: '16px'}}>
+            <div style={{borderLeft: '6px solid #1D70B8', padding: '20px 24px', background: '#ffffff', marginBottom: '32px', boxShadow: '0 2px 4px rgba(0,0,0,0.08)'}}>
+              <strong style={{background: '#1D70B8', color: '#ffffff', fontSize: '12px', fontFamily: 'Arial, sans-serif', fontWeight: 'bold', padding: '4px 10px', letterSpacing: '0.05em', display: 'inline-block', marginBottom: '16px'}}>
                 GOV.UK HEADLINE
               </strong>
-              <h2 className="govuk-heading-l" style={{color: '#12436D', margin: '0'}}>
+              <h2 className="govuk-heading-l" style={{color: '#1D70B8', margin: '0'}}>
                 {result.govuk_headline}
               </h2>
             </div>
@@ -263,14 +270,14 @@ export default function Output() {
             {(result.key_stat || result.key_theme) && (
               <div style={{display: 'flex', gap: '16px', marginBottom: '40px', flexWrap: 'wrap'}}>
                 {result.key_stat && (
-                  <div style={{display: 'inline-flex', flexDirection: 'column', background: '#12436D', color: '#ffffff', padding: '20px 28px', minWidth: '180px', maxWidth: '300px'}}>
-                    <p style={{margin: '0 0 8px 0', fontSize: '12px', fontFamily: 'Arial, sans-serif', fontWeight: 'bold', letterSpacing: '0.08em', opacity: 0.8}}>KEY STAT</p>
+                  <div style={{display: 'inline-flex', flexDirection: 'column', background: '#1D70B8', color: '#ffffff', padding: '20px 28px', minWidth: '180px', maxWidth: '300px'}}>
+                    <p style={{margin: '0 0 8px 0', fontSize: '12px', fontFamily: 'Arial, sans-serif', fontWeight: 'bold', letterSpacing: '0.08em', opacity: 0.85}}>KEY STAT</p>
                     <p style={{margin: '0', fontSize: '22px', fontWeight: 'bold', fontFamily: 'Arial, sans-serif', lineHeight: '1.2'}}>{result.key_stat}</p>
                   </div>
                 )}
                 {result.key_theme && (
-                  <div style={{display: 'inline-flex', flexDirection: 'column', background: '#28A197', color: '#ffffff', padding: '20px 28px', minWidth: '180px', maxWidth: '300px'}}>
-                    <p style={{margin: '0 0 8px 0', fontSize: '12px', fontFamily: 'Arial, sans-serif', fontWeight: 'bold', letterSpacing: '0.08em', opacity: 0.8}}>KEY THEME</p>
+                  <div style={{display: 'inline-flex', flexDirection: 'column', background: '#158187', color: '#ffffff', padding: '20px 28px', minWidth: '180px', maxWidth: '300px'}}>
+                    <p style={{margin: '0 0 8px 0', fontSize: '12px', fontFamily: 'Arial, sans-serif', fontWeight: 'bold', letterSpacing: '0.08em', opacity: 0.85}}>KEY THEME</p>
                     <p style={{margin: '0', fontSize: '18px', fontWeight: 'bold', fontFamily: 'Arial, sans-serif', lineHeight: '1.3'}}>{result.key_theme}</p>
                   </div>
                 )}
@@ -280,14 +287,14 @@ export default function Output() {
             {/* Chart */}
             {type !== 'qual' && (
               <div style={{marginBottom: '40px'}}>
-                <div ref={chartRef} style={{width: '100%', background: '#ffffff', padding: '16px', border: '1px solid #b1b4b6'}} />
+                <div ref={chartRef} style={{width: '100%', background: '#ffffff', padding: '16px', border: '1px solid #CECECE'}} />
                 <div style={{marginTop: '16px'}}>
                   <button className="govuk-button govuk-button--secondary" style={{marginBottom: 0}} onClick={copyChart}>
                     {copied ? '✓ Copied to clipboard' : 'Copy chart as image'}
                   </button>
                 </div>
                 {result.alt_text && (
-                  <p className="govuk-body-s" style={{color: '#505A5F', marginTop: '12px', padding: '12px', background: '#f3f2f1', borderLeft: '4px solid #b1b4b6'}}>
+                  <p className="govuk-body-s" style={{color: '#484949', marginTop: '12px', padding: '12px', background: '#F4F8FB', borderLeft: '4px solid #CECECE'}}>
                     <strong>Alt text:</strong> {result.alt_text}
                   </p>
                 )}
@@ -299,7 +306,7 @@ export default function Output() {
               <div style={{marginBottom: '40px'}}>
                 <h3 className="govuk-heading-s" style={{marginBottom: '20px'}}>Pull quotes</h3>
                 {result.pull_quotes.map((q, i) => (
-                  <blockquote key={i} style={{borderLeft: '4px solid #28A197', paddingLeft: '20px', margin: '0 0 20px 0'}}>
+                  <blockquote key={i} style={{borderLeft: '4px solid #50A1A5', paddingLeft: '20px', margin: '0 0 20px 0'}}>
                     <p className="govuk-body" style={{fontStyle: 'italic', fontSize: '18px', margin: 0}}>"{q}"</p>
                   </blockquote>
                 ))}
@@ -307,8 +314,8 @@ export default function Output() {
             )}
 
             {/* Download */}
-            <div style={{marginBottom: '40px', paddingTop: '24px', borderTop: '1px solid #b1b4b6'}}>
-              <button className="govuk-button" onClick={downloadWord} style={{marginBottom: 0}}>
+            <div style={{marginBottom: '40px', paddingTop: '24px', borderTop: '1px solid #CECECE'}}>
+              <button className="govuk-button" onClick={downloadWord} style={{marginBottom: 0, backgroundColor: '#1D70B8'}}>
                 Download as Word doc
               </button>
             </div>
@@ -316,13 +323,13 @@ export default function Output() {
             {/* Tabloid */}
             <details className="govuk-details" style={{marginBottom: '40px'}}>
               <summary className="govuk-details__summary">
-                <span className="govuk-details__summary-text" style={{color: '#801650'}}>
+                <span className="govuk-details__summary-text" style={{color: '#CA357C'}}>
                   🗞 Tabloid headline — do not use
                 </span>
               </summary>
-              <div className="govuk-details__text" style={{background: '#fff1f4', borderLeft: '4px solid #801650', padding: '16px 20px'}}>
-                <p style={{margin: '0 0 8px 0', fontSize: '12px', fontFamily: 'Arial, sans-serif', fontWeight: 'bold', color: '#801650', letterSpacing: '0.05em'}}>FOR ENTERTAINMENT PURPOSES ONLY</p>
-                <p className="govuk-heading-m" style={{color: '#801650', margin: 0}}>{result.tabloid_headline}</p>
+              <div className="govuk-details__text" style={{background: '#FCF5F8', borderLeft: '4px solid #CA357C', padding: '16px 20px'}}>
+                <p style={{margin: '0 0 8px 0', fontSize: '12px', fontFamily: 'Arial, sans-serif', fontWeight: 'bold', color: '#CA357C', letterSpacing: '0.05em'}}>FOR ENTERTAINMENT PURPOSES ONLY</p>
+                <p className="govuk-heading-m" style={{color: '#CA357C', margin: 0}}>{result.tabloid_headline}</p>
               </div>
             </details>
 
@@ -330,7 +337,7 @@ export default function Output() {
 
           {/* Sidebar */}
           <div className="govuk-grid-column-one-third">
-            <div style={{background: '#f3f2f1', padding: '20px', position: 'sticky', top: '20px'}}>
+            <div style={{background: '#F4F8FB', padding: '20px', position: 'sticky', top: '20px', border: '1px solid #8EB8DC'}}>
               <h3 className="govuk-heading-s" style={{marginBottom: '16px'}}>About this output</h3>
               {result.chart_type && (
                 <div style={{marginBottom: '12px'}}>
@@ -351,7 +358,7 @@ export default function Output() {
                 </div>
               )}
               <hr className="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-              <p className="govuk-body-s" style={{color: '#505A5F', margin: 0}}>Always review AI-generated content before sharing or publishing.</p>
+              <p className="govuk-body-s" style={{color: '#484949', margin: 0}}>Always review AI-generated content before sharing or publishing.</p>
             </div>
           </div>
 
